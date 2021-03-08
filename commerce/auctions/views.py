@@ -14,7 +14,13 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .models import User
 from .models import Listing
-from .serializers import ListingSerializer, CommentSerializer
+from .serializers import ListingSerializer, CommentSerializer, UserSerializer
+
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -24,6 +30,11 @@ class ListingViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class BidViewSet(viewsets.ModelViewSet):
+    queryset = Bid.objects.all()
     serializer_class = CommentSerializer
 
     
