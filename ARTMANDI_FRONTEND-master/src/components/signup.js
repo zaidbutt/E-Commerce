@@ -5,8 +5,9 @@ import userServices from "../Services/UserServices";
 
 
  function Signup (){
-    const [username,setusername]=React.useState();
+     const [username,setusername]=React.useState();
      const [email,setEmail]=React.useState();
+     const [password,setPassword]=React.useState();
    
 
     return (
@@ -39,7 +40,8 @@ style={{height:170,  width:250}}/>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input type="password" className="form-control" placeholder="Enter password"  value={password} onChange={e=>{
+                        setPassword(e.target.value) }}/>
                 </div>
 
                 <div className="form-group">
@@ -48,7 +50,7 @@ style={{height:170,  width:250}}/>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block" onClick={e=>{
-                    userServices.register(username,email).then((data)=>{
+                    userServices.register(username,email,password).then((data)=>{
                         console.log(data)
                         window.location.href="/login"
                     }).catch(err=>{

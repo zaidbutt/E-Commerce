@@ -14,7 +14,7 @@ class UserServices extends GenericServices{
         })
     })
 
-    register=(username,email)=>this.post("/User/?format=api",{username,email});
+    register=(username,email,password)=>this.post("/User/?format=api",{username,email, password});
     logout=()=>{
         localStorage.removeItem("token","")
     }

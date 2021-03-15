@@ -1,8 +1,13 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React,{useState,Component} from 'react'
+import { Link } from 'react-router-dom';
 import FOOTER from './footer';
+import userServices from "../Services/UserServices";
+
 
  function login() {
+        const [username,setusername]=React.useState();
+        const [email,setEmail]=React.useState();
+        const [password,setPassword]=React.useState();
     return (   
         <div className='App'  style={{backgroundColor:"#D3D3D3"}}>      
           <div className="loginForm" 
@@ -18,8 +23,8 @@ import FOOTER from './footer';
             <h3>Sign In</h3>
 
             <div className="form-group">
-                <label>Email address</label>
-                <input type="email" className="form-control" placeholder="Enter email" />
+                <label>Username</label>
+                <input type="text" className="form-control" placeholder="Enter username" />
             </div>
 
             <div className="form-group">
@@ -35,7 +40,15 @@ import FOOTER from './footer';
             </div>
             
             
-            <button type="submit" className="btn btn-primary btn-block" onClick={e=>{window.location.href='./'}}>Login </button>
+            
+            <button type="submit" className="btn btn-primary btn-block" onClick={e=>{
+                    userServices.register(username,password).then((data)=>{
+                        console.log(data)
+                    
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                }}>Login </button>
             <br></br>
             </form>
            

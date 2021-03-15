@@ -14,13 +14,21 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .models import User
 from .models import Listing
-from .serializers import ListingSerializer, CommentSerializer, UserSerializer
+from .serializers import ListingSerializer, CommentSerializer, UserSerializer, BidSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, DjangoModelPermissions
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (TokenAuthentication)
+    permission_classes = [IsAuthenticated]
+    
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -35,6 +43,6 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = BidSerializer
 
     

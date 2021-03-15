@@ -1,5 +1,7 @@
 from .models import Listing, Comment, User, Bid
 from rest_framework import serializers
+from rest_framework import permissions
+
 
 
 
@@ -9,10 +11,22 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password"]
 
 
+
 class ListingSerializer(serializers.ModelSerializer):
+    
     class Meta:
-        model = Listing
-        fields = ["id",'title', 'description', 'image', 'category', 'start_price']
+            PRODUCT_CHOICES = (
+            ('E', "ELECTRONICS"),
+            ('H', "HOME"),
+            ('T', "TOY"),
+            ('E', "EDUCATION")        
+        )
+        
+        
+            category = serializers.ChoiceField(choices = PRODUCT_CHOICES)
+            model = Listing
+            fields = ["id",'title', 'description', 'image', 'category', 'start_price']
+        
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -21,7 +35,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ["user",'comment']
 
 
-class BiddingForm(serializers.ModelSerializer):
+class BidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid
         fields = ["user",'bid_price']
