@@ -17,7 +17,7 @@ router.register(r'Bid', views.BidViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    #path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
+    #path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     #path("", views.index, name="index"),
     #path("login", views.login_view, name="login"),
