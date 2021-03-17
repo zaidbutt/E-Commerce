@@ -1,13 +1,14 @@
 import React,{useState,Component} from 'react'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import FOOTER from './footer';
+
 import userServices from "../Services/UserServices";
 
+ function Login () {
 
- function login() {
-        const [username,setusername]=React.useState();
-        const [email,setEmail]=React.useState();
-        const [password,setPassword]=React.useState();
+    const[Username,setUsername]=React.useState();
+     const[Password,setPassword]=React.useState();
+    
     return (   
         <div className='App'  style={{backgroundColor:"#D3D3D3"}}>      
           <div className="loginForm" 
@@ -16,20 +17,26 @@ import userServices from "../Services/UserServices";
         alignItems: "center",
        
         }} >        
-           <form>
+           <form  method="post" autocomplete="off">
                <div className="IMAGE"> 
                <img src="https://raw.githubusercontent.com/ipenywis/react-login-register/e00bd4637183df94e54c8a19a80b5262834da8f7/src/login.svg" style={{height:250,  width:250}}/>
                </div>
             <h3>Sign In</h3>
 
             <div className="form-group">
-                <label>Username</label>
-                <input type="text" className="form-control" placeholder="Enter username" />
+                <label>Username address</label>
+                <input type="Username" className="form-control" placeholder="Enter Username" value={Username} onChange={e=>{
+                        setUsername(e.target.value)
+                    }}  />
             </div>
-
+           
             <div className="form-group">
                 <label>Password</label>
-                <input type="password" className="form-control" placeholder="Enter password" />
+                <input type="password" className="form-control" placeholder="Enter password" value={Password} onChange={
+                        e=>{
+                            setPassword(e.target.value)
+                        }
+                    } />
             </div>
 
             <div className="form-group">
@@ -40,15 +47,21 @@ import userServices from "../Services/UserServices";
             </div>
             
             
+            <button type="submit" className="btn btn-primary btn-block" 
             
-            <button type="submit" className="btn btn-primary btn-block" onClick={e=>{
-                    userServices.register(username,password).then((data)=>{
+            onClick={e=>{
+                    userServices.login(Username,Password).then((data)=>{
                         console.log(data)
-                    
-                    }).catch(err=>{
-                        console.log(err)
+                        alert("login successful")
+                        window.location.href="/Home"
                     })
-                }}>Login </button>
+                    .catch(err=>{
+                        // console.log(err)
+                        alert("LOGIN FALIED")
+                    })
+                    
+                }}
+                >Login </button>
             <br></br>
             </form>
            
@@ -61,4 +74,4 @@ import userServices from "../Services/UserServices";
 
     )
 }
-export default login;
+export default Login;

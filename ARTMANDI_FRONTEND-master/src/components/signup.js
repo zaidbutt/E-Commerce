@@ -5,10 +5,9 @@ import userServices from "../Services/UserServices";
 
 
  function Signup (){
-     const [username,setusername]=React.useState();
+    const [username,setusername]=React.useState();
      const [email,setEmail]=React.useState();
-     const [password,setPassword]=React.useState();
-   
+    const[password,setpassword]=React.useState();
 
     return (
         <div className="App"  style={{backgroundColor:"#D3D3D3"}}>
@@ -40,8 +39,9 @@ style={{height:170,  width:250}}/>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password"  value={password} onChange={e=>{
-                        setPassword(e.target.value) }}/>
+                    <input type="password" className="form-control" placeholder="Enter password" value={password} onChange={e=>{
+                        setpassword(e.target.value)
+                    }} />
                 </div>
 
                 <div className="form-group">
@@ -53,6 +53,7 @@ style={{height:170,  width:250}}/>
                     userServices.register(username,email,password).then((data)=>{
                         console.log(data)
                         window.location.href="/login"
+                        alert("SINGUP SUCCESSFULLY")
                     }).catch(err=>{
                         console.log(err)
                     })

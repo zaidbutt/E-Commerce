@@ -5,6 +5,11 @@ from rest_framework import permissions
 
 
 
+class LoginSerializer(serializers.ModelSerializer):
+     class Meta:
+         model=User
+         fields=('username','password') 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

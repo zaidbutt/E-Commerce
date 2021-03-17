@@ -1,8 +1,10 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
+
 from django.urls import include, path
 from rest_framework import routers
+from .views import LoginView, Logout
 
 
 
@@ -20,8 +22,8 @@ urlpatterns = [
     #path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     #path("", views.index, name="index"),
-    #path("login", views.login_view, name="login"),
-    #path("logout", views.logout_view, name="logout"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", Logout.as_view(), name="logout"),
     #path("register", views.register, name="register"),
     #path("listing", views.create_listing, name= "listing"),
     #path("product/<int:product_id>/<int:user_id>", views.product, name="product"),

@@ -13,6 +13,7 @@ import { Form,FormControl,Button,Card} from 'react-bootstrap';
   }
 
 componentDidMount(){
+  
 fetch('http://127.0.0.1:8000/Listing/?format=json').then((resp)=> {
   resp.json().then((result) => {
     // console.warn (result.data)
@@ -37,11 +38,10 @@ this.state.products.map((item)=>
      <img src={item.image} />
  <Card style={{ width: '18rem' }}>
   <Card.Img variant="top" src={item.image} />
-  <Card.Body>2de4n
+  <Card.Body>
   <Card.Title>{item.title}</Card.Title>
   <Card.Text>{item.description}</Card.Text>
     <Card.Text>STARTING PRICE : $ {item.start_price}</Card.Text>
-
   </Card.Body>
 </Card>
  </div>

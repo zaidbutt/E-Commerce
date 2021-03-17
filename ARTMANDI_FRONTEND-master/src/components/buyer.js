@@ -42,14 +42,16 @@ fetch('http://127.0.0.1:8000/Listing/?format=json').then((resp)=> {
 this.state.products ?
 this.state.products.map((item)=>
  <div className="col-sm-4">
- <Card style={{ width: '18rem' }}>
-  <Card.Img variant="top" src={item.image} />
+ <Card style={{ width: '18rem', margin:20 }}>
+  <Card.Img variant="top" src={item.image} style={{height:200}} />
   <Card.Body>2de4n
   <Card.Title>{item.title}</Card.Title>
   <Card.Text>{item.description}</Card.Text>
     <Card.Text>STARTING PRICE : $ {item.start_price}</Card.Text>
 
-    <Button variant="primary" type="submit" className="btn btn-primary btn-block" onClick={e=>{window.location.href="/product"}}>BUY NOW</Button>
+    <Button variant="primary" type="submit" className="btn btn-primary btn-block"
+    
+    onClick={e=>{window.location.href="/product"}}>BUY NOW</Button>
   </Card.Body>
 </Card>
  </div>
@@ -61,33 +63,7 @@ this.state.products.map((item)=>
 </div>
 
 
-     
-     <div className="row"style={{margin:30}}>
-     
-     
-     <div class="col-sm"><div class="card" >
-   <img src="http://www.hamailartgalleries.com/uploads/art/thumb_86091a78199546865f8951100aa273ca.JPG" class="card-img-top" alt="..."/>
-   <div class="card-body">
-   <h5 class="card-title">Card title</h5>
-   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-   <a href="#" class="btn btn-primary">Buy Now</a>
-   </div>
-   </div></div>
-
-
-
-   <div class="col-sm"><div class="card" >
-   <img src="http://www.hamailartgalleries.com/uploads/art/thumb_86091a78199546865f8951100aa273ca.JPG" class="card-img-top" alt="..."/>
-   <div class="card-body">
-   <h5 class="card-title">title</h5>
-   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-   <a href="#" class="btn btn-primary">Buy Now</a>
-   </div>
-   </div></div>
  
-   
-   
-     </div>
      <br/><br/><br/><br/><br/><br/>
      
 
