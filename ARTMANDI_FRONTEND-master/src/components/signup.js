@@ -8,6 +8,7 @@ import userServices from "../Services/UserServices";
     const [username,setusername]=React.useState();
      const [email,setEmail]=React.useState();
     const[password,setpassword]=React.useState();
+    const[confirmPassword,setconfirmPassword]=React.useState();
 
     return (
         <div className="App"  style={{backgroundColor:"#D3D3D3"}}>
@@ -46,11 +47,14 @@ style={{height:170,  width:250}}/>
 
                 <div className="form-group">
                     <label>Confirm Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password again" />
+                    <input type="password" className="form-control" placeholder="Enter password again" value={confirmPassword} onChange={e=>{
+                        setconfirmPassword(e.target.value)
+                    }
+                }/>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block" onClick={e=>{
-                    userServices.register(username,email,password).then((data)=>{
+                    userServices.register(username,email,password,confirmPassword).then((data)=>{
                         console.log(data)
                         window.location.href="/login"
                         alert("SINGUP SUCCESSFULLY")

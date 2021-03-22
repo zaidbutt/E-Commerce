@@ -8,7 +8,7 @@ class UserServices extends GenericServices{
     }
 
     login=(Username,Password)=>new Promise((resolve,reject)=>{
-        this.post("api/auth/token/login/",{Username,Password}).then((token)=>{
+        this.post("login/",{username:Username,password:Password}).then((token)=>{
             console.log(token)
             localStorage.setItem("token",token);
             console.warn({token});
@@ -16,7 +16,7 @@ class UserServices extends GenericServices{
         })
     })
 
-    register=(username,email,password)=>this.post("/User/?format=api",{username,email,password});
+    register=(username,email,password,confirmPassword)=>this.post("/register/",{username,email,password,confirmPassword});
     logout=()=>{
         localStorage.removeItem("token","")
     }

@@ -3,12 +3,27 @@ from rest_framework import serializers
 from rest_framework import permissions
 
 
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        help_text='Passwords Must Match',
+        style={'input_type': 'password', 'placeholder': 'Password'}
+    )
+    confirmPassword = serializers.CharField(
+        write_only=True,
+        required=True,
+        help_text='Passwords Must Match',
+        style={'input_type': 'password', 'placeholder': 'Password'}
+    )
 
 
 class LoginSerializer(serializers.ModelSerializer):
      class Meta:
          model=User
-         fields=('username','password') 
+         fields=('username','password',) 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
