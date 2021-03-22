@@ -1,12 +1,9 @@
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 from django.urls import include, path
 from rest_framework import routers
 from .views import LoginView, Logout, Register
-
 
 
 router = routers.DefaultRouter()

@@ -120,17 +120,12 @@ USE_L10N = True
 USE_TZ = True
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-    
-        'rest_framework.authentication.TokenAuthentication'
-    ]
-}
-REST_FRAMEWORK = {
-   'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}
+
+# REST_FRAMEWORK = {
+#    'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
+# }
 CORS_ORIGIN_ALLOW_ALL = True
 #'django.middleware.csrf.CsrfViewMiddleware',
 # Static files (CSS, JavaScript, Images)

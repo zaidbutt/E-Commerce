@@ -66,7 +66,6 @@ class LoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
     @csrf_exempt
     def post(self,request):        
-        print(request.data)
         username = request.data['username']
         password = request.data['password']
         user = authenticate(username=username, password=password)
