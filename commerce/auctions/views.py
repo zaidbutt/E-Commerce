@@ -79,7 +79,7 @@ class LoginView(ObtainAuthToken):
                 #     'Token':token.key
                 # }
                 login(request, user)
-                return Response({"message":user.username + " has Logged in"}, status=status.HTTP_200_OK)
+                return Response({"user_id":user.id}, status=status.HTTP_200_OK)
             return Response(user,status=status.HTTP_400_BAD_REQUEST )
         return Response(user, status=status.HTTP_404_NOT_FOUND)
 
@@ -101,6 +101,18 @@ class UserViewSet(viewsets.ModelViewSet):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+    def perform_create(self, serializer):
+        serializer.save(created_by= self.request.user)
 
 
 class CommentViewSet(viewsets.ModelViewSet):

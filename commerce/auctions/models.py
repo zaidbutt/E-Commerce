@@ -12,6 +12,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=30)
     description = models.TextField(max_length=300)
     image = models.URLField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     PRODUCT_CHOICES = (
         ('E', "ELECTRONICS"),
         ('H', "HOME"),
@@ -31,13 +32,13 @@ class UserListing(models.Model):
 
 class Bid(models.Model):
 
-    user_listing = models.ForeignKey(UserListing, default = 0, on_delete = models.CASCADE)
+    listing = models.ForeignKey(Listing, default = 0,  on_delete = models.CASCADE)
     user = models.ForeignKey(User,default = 0, on_delete=models.CASCADE)
     bid_price = models.IntegerField()
 
 
 class Comment(models.Model):
-    user_listing = models.ForeignKey(UserListing, default = 0,  on_delete = models.CASCADE)
+    listing = models.ForeignKey(Listing, default = 0,  on_delete = models.CASCADE)
     user = models.ForeignKey(User, default = 0,on_delete=models.CASCADE)
     comment = models.TextField(max_length=100)
 

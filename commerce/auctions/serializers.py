@@ -45,7 +45,7 @@ class ListingSerializer(serializers.ModelSerializer):
         
             category = serializers.ChoiceField(choices = PRODUCT_CHOICES)
             model = Listing
-            fields = ["id",'title', 'description', 'image', 'category', 'start_price']
+            fields = ["id",'title', 'description', 'image', 'category', 'start_price', 'created_by']
         
 
 
