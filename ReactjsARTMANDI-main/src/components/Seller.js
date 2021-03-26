@@ -2,13 +2,17 @@ import React,{useState} from 'react'
 import FOOTER from './footer';
 
 import userServices from "../Services/UserServices";
+
 function Seller() {
+    console.log(localStorage.getItem("user_id"))
 
     const [title,settitle]=React.useState();
     const [description,setdescription]=React.useState();
    const[image,setimage]=React.useState();
    const [category,setcategory]=useState("T");
   const[startPrice,setstartPrice]=React.useState();
+  const[created_by,setcreated_by]=React.useState();
+
 
     return (
         <div className="App" style={{backgroundColor:"#D3D3D3"}}>
@@ -60,12 +64,16 @@ function Seller() {
                         setimage(e.target.value)
                     }}/> <br/> <br/>
 
+            {/* <div className="created_by" value={localStorage.getItem("user_id")}>        </div> */}
+            
+
+
             <button type="submit" className="btn btn-primary btn-block" onClick={e=>{
+                    var created_by = localStorage.getItem("user_id")
                     var start_price= parseInt(startPrice)
-                    userServices.addProduct(title,description,image,category,start_price).then((data)=>{
-                        console.log(data)
-                        alert({title,description,startPrice,category});
-                        window.location.href="/"
+                    userServices.addProduct(title,description,image,category,start_price, created_by).then((data)=>{
+                        alert(data)
+                        window.location.href="/BUYER"
                     }).catch(err=>{
                         console.log(err)
                     alert("adding failed")

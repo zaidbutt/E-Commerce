@@ -107,12 +107,12 @@ class ListingViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response( status=status.HTTP_201_CREATED)
 
 
     def perform_create(self, serializer):
-        serializer.save(created_by= self.request.user)
+        serializer.save(created_by= User.objects.get(pk=self.request.data['created_by']))
 
 
 class CommentViewSet(viewsets.ModelViewSet):

@@ -3,7 +3,6 @@ import React ,{ useState, useEffect} from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router';
 import FOOTER from './footer';
-import { Button } from 'bootstrap';
 
  function Product() {
 
