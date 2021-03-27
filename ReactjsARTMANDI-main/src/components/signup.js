@@ -72,7 +72,7 @@ style={{height:170,  width:250}}/>
                 onClick={e=>{
                     userServices.register(username, email, password, confirmPassword).then((data)=>{
                         console.log(data)
-                        window.location.href="/"
+                        window.location.href="/login/"
                         alert("SINGUP SUCCESSFULLY")
                     }).catch(err=>{
                         console.log(err)

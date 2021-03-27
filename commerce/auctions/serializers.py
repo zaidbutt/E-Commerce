@@ -52,7 +52,7 @@ class ListingSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ["user",'comment']
+        fields = ["listing", "user", 'comment']
 
 
 class BidSerializer(serializers.ModelSerializer):

@@ -12,6 +12,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import User
 from .models import Listing
 from .serializers import RegisterSerializer, LoginSerializer, ListingSerializer, CommentSerializer, UserSerializer, BidSerializer
@@ -118,6 +119,20 @@ class ListingViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['listing']
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)        
+        return Response( status=status.HTTP_201_CREATED)
+
+
+    def perform_create(self, serializer):
+        serializer.save(listing= Listing.objects.get(pk=self.request.data['listing']), 
+        user= User.objects.get(pk=self.request.data['user']))
 
 
 class BidViewSet(viewsets.ModelViewSet):
