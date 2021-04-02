@@ -139,6 +139,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['listing']
     def create(self, request):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
