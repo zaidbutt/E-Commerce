@@ -58,5 +58,5 @@ class CommentSerializer(serializers.ModelSerializer):
 class BidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid
-        fields = ["user",'bid_price']
+        fields = ['listing', "user",'bid_price']
         

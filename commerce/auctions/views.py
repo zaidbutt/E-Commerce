@@ -3,6 +3,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Max
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
 from .models import ListingForm, Listing, UserListing, BiddingForm, CommentForm, Bid, Comment
@@ -138,5 +139,48 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
+    def create(self, request):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        
+        serializer.is_valid(raise_exception=True)
+        listing = Listing.objects.get(pk= self.request.data['listing'])
+        current_bid= int(request.data['bid_price'])
+        if current_bid <= listing.start_price:
+            return Response({"alert": "Bid must be greater than the current price of Product "})
+        all_bids = []
+        all_bids = Bid.objects.values("bid_price").filter(listing = self.request.data['listing'])
+        max_bid = all_bids.aggregate(Max("bid_price"))
+        print(max_bid)
+        print(all_bids)
+    
+        
+        if all_bids.count() == 0:
+            self.perform_create(serializer)
+            return Response(status=status.HTTP_201_CREATED)
+        elif len(all_bids) == 1 and current_bid > max_bid["bid_price__max"]:
+            self.perform_create(serializer)
+            return Response(status=status.HTTP_201_CREATED)
+        elif len(all_bids) > 1 and current_bid > max_bid["bid_price__max"]:
+            self.perform_create(serializer)
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response({"alert": "Bid must be greater than Last Bid "}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        
+        print(all_bids)
+        
+        if current_bid <= max(all_bids):
+            return Response({"alert": "Bid must be greater than the last bid "})
+
+        self.perform_create(serializer)        
+        return Response( status=status.HTTP_201_CREATED)
+
+
+    def perform_create(self, serializer):
+        serializer.save(listing= Listing.objects.get(pk=self.request.data['listing']), 
+        user= User.objects.get(pk=self.request.data['user']))
+
 
     
