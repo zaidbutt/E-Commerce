@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db.models import Max
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
-from .models import ListingForm, Listing, UserListing, BiddingForm, CommentForm, Bid, Comment
+from .models import ListingForm, Listing, UserListing, BiddingForm, CommentForm, Bid, Comment, Watchlist
 from rest_framework import generics, permissions
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
@@ -16,7 +16,7 @@ from rest_framework.reverse import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import User
 from .models import Listing
-from .serializers import RegisterSerializer, LoginSerializer, ListingSerializer, CommentSerializer, UserSerializer, BidSerializer
+from .serializers import WatchlistSerializer, RegisterSerializer, LoginSerializer, ListingSerializer, CommentSerializer, UserSerializer, BidSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.authentication import TokenAuthentication
@@ -81,7 +81,8 @@ class LoginView(ObtainAuthToken):
                 #     'Token':token.key
                 # }
                 login(request, user)
-                return Response({"user_id":user.id}, status=status.HTTP_200_OK)
+                return Response({"user_id":user.id, "username":username
+                }, status=status.HTTP_200_OK)
             return Response(user,status=status.HTTP_400_BAD_REQUEST )
         return Response(user, status=status.HTTP_404_NOT_FOUND)
 
@@ -153,18 +154,18 @@ class BidViewSet(viewsets.ModelViewSet):
         all_bids = []
         all_bids = Bid.objects.values("bid_price").filter(listing = self.request.data['listing'])
         max_bid = all_bids.aggregate(Max("bid_price"))
-        print(max_bid)
-        print(all_bids)
-    
-        
+        watch = Watchlist(listing = listing, user = request.user)
         if all_bids.count() == 0:
             self.perform_create(serializer)
+            watch.save()
             return Response(status=status.HTTP_201_CREATED)
         elif len(all_bids) == 1 and current_bid > max_bid["bid_price__max"]:
             self.perform_create(serializer)
+            watch.save()
             return Response(status=status.HTTP_201_CREATED)
         elif len(all_bids) > 1 and current_bid > max_bid["bid_price__max"]:
             self.perform_create(serializer)
+            watch.save()
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response({"alert": "Bid must be greater than Last Bid "}, status=status.HTTP_400_BAD_REQUEST)
@@ -176,13 +177,21 @@ class BidViewSet(viewsets.ModelViewSet):
         if current_bid <= max(all_bids):
             return Response({"alert": "Bid must be greater than the last bid "})
 
-        self.perform_create(serializer)        
+        self.perform_create(serializer)
+        watch.save()        
         return Response( status=status.HTTP_201_CREATED)
 
 
     def perform_create(self, serializer):
         serializer.save(listing= Listing.objects.get(pk=self.request.data['listing']), 
         user= User.objects.get(pk=self.request.data['user']))
+
+
+class WatchlistViewSet(viewsets.ModelViewSet):
+    queryset = Watchlist.objects.all()
+    serializer_class = WatchlistSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
 
 
     

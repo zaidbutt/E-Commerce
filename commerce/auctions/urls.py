@@ -11,6 +11,7 @@ router.register(r"User", views.UserViewSet)
 router.register(r"Comment", views.CommentViewSet)
 router.register(r'Listing', views.ListingViewSet)
 router.register(r'Bid', views.BidViewSet)
+router.register(r'Watchlist', views.WatchlistViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

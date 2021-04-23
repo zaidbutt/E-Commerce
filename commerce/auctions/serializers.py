@@ -1,4 +1,4 @@
-from .models import Listing, Comment, User, Bid
+from .models import Listing, Comment, User, Bid, Watchlist
 from rest_framework import serializers
 from rest_framework import permissions
 
@@ -60,3 +60,8 @@ class BidSerializer(serializers.ModelSerializer):
         model = Bid
         fields = ['listing', "user",'bid_price']
         
+
+class WatchlistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Watchlist
+        fields = ["listing", "user"]

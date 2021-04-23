@@ -42,6 +42,11 @@ class Comment(models.Model):
     user = models.ForeignKey(User, default = 0,on_delete=models.CASCADE)
     comment = models.TextField(max_length=100)
 
+
+class Watchlist(models.Model):
+    listing = models.ForeignKey(Listing, default = 0,  on_delete = models.CASCADE)
+    user = models.ForeignKey(User, default = 0,on_delete=models.CASCADE)
+
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
@@ -71,4 +76,6 @@ class CommentForm(forms.ModelForm):
             "comment": forms.TextInput(attrs={'class':'form-control'})
 
         }
+
+    
 
