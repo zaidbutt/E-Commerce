@@ -104,6 +104,8 @@ class UserViewSet(viewsets.ModelViewSet):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id']
 
     def create(self, request):
         print(request.data)
@@ -123,7 +125,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['listing']
-
+    
     def create(self, request):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
@@ -154,7 +156,9 @@ class BidViewSet(viewsets.ModelViewSet):
         all_bids = []
         all_bids = Bid.objects.values("bid_price").filter(listing = self.request.data['listing'])
         max_bid = all_bids.aggregate(Max("bid_price"))
-        watch = Watchlist(listing = listing, user = request.user)
+        print(request.user)
+        user = User.objects.get(pk = int(request.data['user']))
+        watch = Watchlist(listing = listing, user = user)
         if all_bids.count() == 0:
             self.perform_create(serializer)
             watch.save()
@@ -169,10 +173,6 @@ class BidViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response({"alert": "Bid must be greater than Last Bid "}, status=status.HTTP_400_BAD_REQUEST)
-
-
-        
-        print(all_bids)
         
         if current_bid <= max(all_bids):
             return Response({"alert": "Bid must be greater than the last bid "})
