@@ -50,12 +50,16 @@ class ListingSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField( source="user.username", read_only=True)
     class Meta:
         model = Comment
-        fields = ["listing", "user", 'comment']
+        fields = ["listing", "user", 'comment', "username" ]
+        
+        
 
 
 class BidSerializer(serializers.ModelSerializer):
+    username = serializers.CharField( source="user.username", read_only=True)
     class Meta:
         model = Bid
         fields = ['listing', "user",'bid_price']

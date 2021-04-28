@@ -8,7 +8,7 @@ from .views import LoginView, Logout, Register
 
 router = routers.DefaultRouter()
 router.register(r"User", views.UserViewSet)
-router.register(r"Comment", views.CommentViewSet)
+router.register(r"Comment", views.CommentViewSet, basename='Comments')
 router.register(r'Listing', views.ListingViewSet)
 router.register(r'Bid', views.BidViewSet)
 router.register(r'Watchlist', views.WatchlistViewSet)
