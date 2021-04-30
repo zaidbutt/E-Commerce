@@ -45,7 +45,7 @@ class ListingSerializer(serializers.ModelSerializer):
         
             category = serializers.ChoiceField(choices = PRODUCT_CHOICES)
             model = Listing
-            fields = ["id",'title', 'description', 'image', 'category', 'start_price', 'created_by']
+            fields = ["id",'title', 'description', 'image', 'category', 'start_price', 'created_by', "created_at", "end_date"]
         
 
 
@@ -62,7 +62,7 @@ class BidSerializer(serializers.ModelSerializer):
     username = serializers.CharField( source="user.username", read_only=True)
     class Meta:
         model = Bid
-        fields = ['listing', "user",'bid_price']
+        fields = ['listing', "user",'bid_price', 'username']
         
 
 class WatchlistSerializer(serializers.ModelSerializer):

@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import ModelForm
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import timedelta
 
 class User(AbstractUser):
     pass
@@ -21,6 +22,9 @@ class Listing(models.Model):
     )
     category = models.CharField(max_length=2, choices=PRODUCT_CHOICES)
     start_price = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
+
     
 
 
