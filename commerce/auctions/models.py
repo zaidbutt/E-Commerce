@@ -24,6 +24,7 @@ class Listing(models.Model):
     start_price = models.IntegerField()
     created_at = models.DateField(auto_now_add=True)
     end_date = models.DateField()
+    completed = models.BooleanField(default=False)
 
     
 
