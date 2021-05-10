@@ -18,7 +18,7 @@ router.register(r'Watchlist', views.WatchlistViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    #path("", views.index, name="index"),
+    path("closebid/", views.closebid, name="closebid"),
     path("login/", LoginView.as_view()),
     path("logout/", Logout.as_view(), name="logout"),
     path("register/", Register.as_view(), name="register"),
