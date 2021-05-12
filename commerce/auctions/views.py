@@ -199,10 +199,16 @@ class WatchlistViewSet(viewsets.ModelViewSet):
 
 def closebid(request):
     if request.method == "POST":
-        sold = Listing.objects.get(pk = int(request.data["listing_id"]))
+        listing_id = int(request.POST["listing"])
+        sold = Listing.objects.get(pk = listing_id)
         sold.completed = True
         sold.save()
-        return Response({"message":"This Bid has been Closed"})
+        all_bids = Bid.objects.filter(listing = listing_id)
+        max_bid = all_bids.aggregate(Max("bid_price"))
+        bid = Bid.objects.get(bid_price=max_bid["bid_price__max"])
+        return JsonResponse({"bid":bid.bid_price, 
+        "user":bid.user.username}, status=status.HTTP_202_ACCEPTED)
+    return HttpResponse({"hi"})
         
 
 
