@@ -25,6 +25,8 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
     completed = models.BooleanField(default=False)
+    bider = models.ForeignKey('Bid',null=True, related_name='+', on_delete=models.CASCADE)
+
 
     
 
