@@ -111,7 +111,7 @@ class LoginView(ObtainAuthToken):
                 return Response({"user_id":user.id, "username":username
                 }, status=status.HTTP_200_OK)
             return Response(user,status=status.HTTP_400_BAD_REQUEST )
-        return Response(user, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class Logout(APIView):
