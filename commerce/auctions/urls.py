@@ -24,6 +24,8 @@ urlpatterns = [
     path("register/", Register.as_view(), name="register"),
     path("test-payment/", views.test_payment),
     path("save-stripe-info/", views.save_stripe_info),
+    path("activate/", views.activate),
+    
     
     #path("listing", views.create_listing, name= "listing"),
     #path("product/<int:product_id>/<int:user_id>", views.product, name="product"),

@@ -1,3 +1,10 @@
+from django.template.loader import render_to_string
+from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from .tokens import account_activation_token
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -11,6 +18,7 @@ from rest_framework import generics, permissions
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -64,7 +72,7 @@ def save_stripe_info(request):
 class Register(APIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
-
+    
     def post(self, request):    
         username = request.data['username']
         password = request.data['password']
@@ -76,13 +84,32 @@ class Register(APIView):
             })
         
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
+            #Unique Email
+            if User.objects.filter(email=email).exists():
+                return Response({"message":"Email exists"})
+            user = User.objects.create_user(username=username, password=password, email=email)
+            user.is_active = False
             user.save()
-            token, _ = Token.objects.get_or_create(user=user)
-            #login(request, user)
-            return Response({"message":"User saved Successfully", "token":token.key})
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your account.'
+            print("HELLOOOOOOOOOOOO")
+            message = {
+                            'user': user.username,
+                            'domain': current_site.domain,
+                            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                            'token': account_activation_token.make_token(user),
+                        }
+            to_email = email
+            print("HELLOOOOOOOOOOOO")
+            send_mail(mail_subject, json.dumps(message), "xaid.butt.10@gmail.com", [to_email])
+            print("HELLOOOOOOOOOOOO")            
+            
+            return HttpResponse('Please confirm your email address to complete the registration')
+
+            #return Response({"message":"Activate your Account"})
         except IntegrityError:
-            return Response({"message": "Username already taken."
+            
+            return HttpResponse({"message": "Username already taken."
             })
 
             
@@ -90,14 +117,15 @@ class Register(APIView):
 class LoginView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     serializer_class= LoginSerializer
-    queryset=User.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    queryset=User.objects.all()    
     permission_classes = [AllowAny]
     @csrf_exempt
     def post(self,request):        
         username = request.data['username']
         password = request.data['password']
         user = authenticate(username=username, password=password)
+        print(username,password)
+        print(user)
         if user is not None:            
             if user.is_active:
                 # print("here")
@@ -110,8 +138,8 @@ class LoginView(ObtainAuthToken):
                 login(request, user)
                 return Response({"user_id":user.id, "username":username
                 }, status=status.HTTP_200_OK)
-            return Response(user,status=status.HTTP_400_BAD_REQUEST )
-        return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Not Verified"},status=status.HTTP_400_BAD_REQUEST )
+        return Response({"message": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class Logout(APIView):
@@ -238,6 +266,21 @@ def closebid(request):
 
         return JsonResponse({"message":"ok"},status=status.HTTP_202_ACCEPTED)
     return HttpResponse({"hi"})
+
+def activate(request):
+    token = request.POST["token"]
+    User = get_user_model()
+    try:
+        uid = force_text(urlsafe_base64_decode(request.POST["uid"]))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
         
 
 

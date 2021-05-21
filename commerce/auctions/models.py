@@ -25,7 +25,10 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
     completed = models.BooleanField(default=False)
-    bider = models.ForeignKey('Bid',null=True, related_name='+', on_delete=models.CASCADE)
+    bider = models.ForeignKey('Bid',null=True, related_name='+', on_delete=models.CASCADE,blank=True)
+
+    def __str__(self) -> str:
+        return str(self.id) + " " + self.title
 
 
     
@@ -42,6 +45,9 @@ class Bid(models.Model):
     listing = models.ForeignKey(Listing, default = 0,  on_delete = models.CASCADE)
     user = models.ForeignKey(User,default = 0, on_delete=models.CASCADE)
     bid_price = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.user.username + " " + self.listing.title + " " + str(self.bid_price)
 
 
 class Comment(models.Model):
