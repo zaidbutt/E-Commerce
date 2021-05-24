@@ -101,7 +101,7 @@ class Register(APIView):
                         }
             to_email = email
             print("HELLOOOOOOOOOOOO")
-            send_mail(mail_subject, json.dumps(message), "xaid.butt.10@gmail.com", [to_email])
+            send_mail(mail_subject, json.dumps(message), "artmandi.2021@gmail.com", [to_email])
             print("HELLOOOOOOOOOOOO")            
             
             return HttpResponse('Please confirm your email address to complete the registration')

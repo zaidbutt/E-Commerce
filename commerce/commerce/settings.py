@@ -136,6 +136,6 @@ STATIC_URL = '/static/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'xaid.butt.10@gmail.com'
-EMAIL_HOST_PASSWORD = 'fa17bcs112'
+EMAIL_HOST_USER = 'artmandi.2021@gmail.com'
+EMAIL_HOST_PASSWORD = 'fa17bcsc'
 EMAIL_PORT = 587
