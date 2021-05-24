@@ -33,6 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ListingSerializer(serializers.ModelSerializer):
+    artist =  serializers.CharField( source="created_by.username", read_only=True)
     winner_username = serializers.CharField( source="bider.user.username", read_only=True)
     winner_bidprice = serializers.CharField( source="bider.bid_price", read_only=True)
     
@@ -47,7 +48,7 @@ class ListingSerializer(serializers.ModelSerializer):
         
             category = serializers.ChoiceField(choices = PRODUCT_CHOICES)
             model = Listing
-            fields = ["id",'title', 'description', 'image', 'category', 'start_price', 'created_by', "created_at", "end_date", "completed", "winner_username", "winner_bidprice"]
+            fields = ["id",'title', 'description', 'image', 'category', "length" , "width" , 'start_price', "artist" ,'created_by', "created_at", "end_date", "completed", "winner_username", "winner_bidprice"]
         
 
 
