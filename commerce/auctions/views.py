@@ -72,7 +72,7 @@ def save_stripe_info(request):
         customer=customer, 
         payment_method=payment_method_id,  
         currency='usd', # you can provide any currency you want
-        amount=999,
+        amount=request.POST["winprice"],
         confirm=True) 
         
      
