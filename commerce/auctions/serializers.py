@@ -48,7 +48,7 @@ class ListingSerializer(serializers.ModelSerializer):
         
             category = serializers.ChoiceField(choices = PRODUCT_CHOICES)
             model = Listing
-            fields = ["id",'title', 'description', 'image', 'category', "length" , "width" , 'start_price', "artist" ,'created_by', "created_at", "end_date", "completed", "winner_username", "winner_bidprice"]
+            fields = ["id",'title', 'description', 'image', 'category', "length" , "width", "paid" , 'start_price', "artist" ,'created_by', "created_at", "end_date", "completed", "winner_username", "winner_bidprice"]
         
 
 
