@@ -57,6 +57,7 @@ def save_stripe_info(request):
     email = data['email']
     payment_method_id = data['payment_method_id']
     extra_msg = '' 
+    amount = int(request.POST["Highestbid"]) * 100
     customer_data = stripe.Customer.list(email=email).data  
     if len(customer_data) == 0:
     # creating customer
@@ -72,11 +73,11 @@ def save_stripe_info(request):
         customer=customer, 
         payment_method=payment_method_id,  
         currency='usd', # you can provide any currency you want
-        amount=request.POST["winprice"],
+        amount=amount,
         confirm=True) 
         
      
-    return Response(status=status.HTTP_200_OK, 
+    return JsonResponse(status=status.HTTP_200_OK, 
       data={
         'message': 'Success', 
         'data': {'customer_id': customer.id}   
