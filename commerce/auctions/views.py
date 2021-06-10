@@ -74,8 +74,12 @@ def save_stripe_info(request):
         payment_method=payment_method_id,  
         currency='usd', # you can provide any currency you want
         amount=amount,
-        confirm=True) 
-        
+        confirm=True)
+        id = request.POST["id"]
+        product = Listing.objects.get(pk=id)
+        product.paid = True
+        product.save()
+               
      
     return JsonResponse(status=status.HTTP_200_OK, 
       data={
