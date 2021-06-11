@@ -93,5 +93,8 @@ class CommentForm(forms.ModelForm):
 
         }
 
-    
+class Delivery(models.Model):
+    listing = models.OneToOneField(Listing, on_delete= models.CASCADE)
+    address = models.TextField(max_length=500, blank=True)
+    delivered = models.BooleanField(default=False)    
 
