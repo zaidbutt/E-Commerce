@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.db.models import Max
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
-from .models import ListingForm, Listing, UserListing, BiddingForm, CommentForm, Bid, Comment, Watchlist
+from .models import Delivery, ListingForm, Listing, UserListing, BiddingForm, CommentForm, Bid, Comment, Watchlist
 from rest_framework import generics, permissions
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
@@ -304,4 +304,12 @@ def activate(request):
         
 
 
-    
+def delivery(request):
+    if request.method == "POST":
+        listing = request.POST["id"]
+        address = request.POST["address"]
+        deliver = Delivery.objects.create(listing=listing, address=address)
+        deliver.save()
+        return JsonResponse({"message":"Your Product will be delivered Soon"})
+    else:
+        return JsonResponse({"message": 'POST Only'})

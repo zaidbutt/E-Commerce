@@ -25,6 +25,7 @@ urlpatterns = [
     path("test-payment/", views.test_payment),
     path("save-stripe-info/", views.save_stripe_info),
     path("activate/", views.activate),
+    path("delivery/", views.delivery),
     
     
     #path("listing", views.create_listing, name= "listing"),
