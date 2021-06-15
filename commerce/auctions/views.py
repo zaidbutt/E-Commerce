@@ -39,7 +39,12 @@ from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import ObtainAuthToken
 import json
 import stripe
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 stripe.api_key = "sk_test_51Is5oDBokRZBbAhwZNSMTxLLcEKtKjxDWIVh1aWhfQPywS3I8qO07rUxzYncAB9cnKKq25qJuwVJChjlVuGvlOHi00gDpNjBKB"
 
 
@@ -92,6 +97,7 @@ def save_stripe_info(request):
 class Register(APIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     
     def post(self, request):    
         username = request.data['username']
@@ -106,7 +112,7 @@ class Register(APIView):
         try:
             #Unique Email
             if User.objects.filter(email=email).exists():
-                return Response({"message":"Email exists"})
+                return JsonResponse({"message":"Email exists"})
             user = User.objects.create_user(username=username, password=password, email=email)
             user.is_active = False
             user.save()
@@ -129,18 +135,19 @@ class Register(APIView):
             #return Response({"message":"Activate your Account"})
         except IntegrityError:
             
-            return HttpResponse({"message": "Username already taken."
+            return JsonResponse({"message": "Username already taken."
             })
 
             
-@method_decorator(csrf_exempt, name='dispatch')
-class LoginView(ObtainAuthToken):
+
+class LoginView(APIView):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     serializer_class= LoginSerializer
     queryset=User.objects.all()    
     permission_classes = [AllowAny]
-    @csrf_exempt
-    def post(self,request):        
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+    
+    def post(self,request):      
         username = request.data['username']
         password = request.data['password']
         user = authenticate(username=username, password=password)
@@ -288,20 +295,22 @@ def closebid(request):
     return HttpResponse({"hi"})
 
 def activate(request):
-    token = request.POST["token"]
-    User = get_user_model()
-    try:
-        uid = force_text(urlsafe_base64_decode(request.POST["uid"]))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-    else:
-        return HttpResponse('Activation link is invalid!')
-        
+    if request.method=="POST":
+        print(request)
+        # token = request.POST["token"]
+        User = get_user_model()
+        try:
+            uid = force_text(urlsafe_base64_decode(request.POST["uid"]))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, request.POST["token"]):
+            user.is_active = True
+            user.save()
+            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        else:
+            return HttpResponse('Activation link is invalid!')
+            
 
 
 def delivery(request):
