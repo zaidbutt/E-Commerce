@@ -188,6 +188,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = ListingSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id']
+    authentication_classes = (CsrfExemptSessionAuthentication,)
 
     def create(self, request):
         print(request.data)
@@ -207,6 +208,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['listing']
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     
     
 
@@ -229,6 +231,7 @@ class BidViewSet(viewsets.ModelViewSet):
     serializer_class = BidSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['listing']
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     def create(self, request):
         print(request.data)
         serializer = self.get_serializer(data=request.data)

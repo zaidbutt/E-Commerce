@@ -23,7 +23,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=2, choices=PRODUCT_CHOICES)
     start_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField(blank=True)
     completed = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     length = models.IntegerField(blank=True, default=0)
